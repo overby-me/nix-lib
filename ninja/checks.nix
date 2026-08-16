@@ -1,5 +1,5 @@
 # Flakelight module: checks for the ninja library. Imported explicitly from
-# flake.nix (the nix/lib autoloader only routes default.nix).
+# flake.nix (the platform/nix/lib autoloader only routes default.nix).
 #
 # Run one: nix build .#checks.x86_64-linux.ninja-build-trivial
 # (never `nix flake check`, see the repo rules)

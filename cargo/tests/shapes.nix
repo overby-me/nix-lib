@@ -1,4 +1,4 @@
-# Run: nix eval -f nix/lib/cargo/tests/shapes.nix
+# Run: nix eval -f platform/nix/lib/cargo/tests/shapes.nix
 #
 # Polymorphic manifest shapes (nocargo issue #10 class): integer edition,
 # bare-string crate-type, single [bin] table instead of [[bin]].

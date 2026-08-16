@@ -3,7 +3,7 @@
 # The interpreter is deliberately host-agnostic: `load()` is resolved by a
 # caller-supplied `loadModule`, extra globals are injected via `extraGlobals`,
 # and an opaque `world` accumulator is threaded through evaluation so a host
-# (e.g. Buck2) can collect effects. See nix/lib/buck2/PLAN.md.
+# (e.g. Buck2) can collect effects. See platform/nix/lib/buck2/PLAN.md.
 let
   V = import ./values.nix;
   parser = import ./parser.nix;

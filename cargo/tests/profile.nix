@@ -1,4 +1,4 @@
-# Run: nix eval -f nix/lib/cargo/tests/profile.nix
+# Run: nix eval -f platform/nix/lib/cargo/tests/profile.nix
 let
   profile = import ../lib/profile.nix;
 

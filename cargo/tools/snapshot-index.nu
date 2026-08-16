@@ -6,7 +6,7 @@
 # eval time without IFD or a giant flake input. See PLAN.md.
 #
 # Usage:
-#   nu nix/lib/cargo/tools/snapshot-index.nu <out-dir> <Cargo.lock>...
+#   nu platform/nix/lib/cargo/tools/snapshot-index.nu <out-dir> <Cargo.lock>...
 
 const CRATES_IO = "registry+https://github.com/rust-lang/crates.io-index"
 

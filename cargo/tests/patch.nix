@@ -1,4 +1,4 @@
-# Run: nix eval -f nix/lib/cargo/tests/patch.nix
+# Run: nix eval -f platform/nix/lib/cargo/tests/patch.nix
 #
 # A `[patch.crates-io]` override redirecting `mycrate` to a local path makes
 # it a path package in the lock (no source). loadWorkspace must discover the

@@ -21,8 +21,8 @@
 # the first time (cargo downloads manifests of locked crates).
 #
 # Usage:
-#   nu nix/lib/cargo/tools/diff-cargo.nu <project-dir> [--platform x86_64-linux]
-#   nu nix/lib/cargo/tools/diff-cargo.nu sweep rust/*/
+#   nu platform/nix/lib/cargo/tools/diff-cargo.nu <project-dir> [--platform x86_64-linux]
+#   nu platform/nix/lib/cargo/tools/diff-cargo.nu sweep rust/*/
 
 const TRIPLES = {
   x86_64-linux: "x86_64-unknown-linux-gnu",

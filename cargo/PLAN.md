@@ -2,7 +2,7 @@
 
 Build Rust projects from `Cargo.lock` with per-crate Nix derivations, using
 neither import-from-derivation nor code generation. A reusable library in the
-style of `nix/lib/deno` (parse the lock at eval time, fetch with FODs, build in
+style of `platform/nix/lib/deno` (parse the lock at eval time, fetch with FODs, build in
 the sandbox), exposed through the flakelight `perSystemLib` module.
 
 Status: in progress. See milestones at the bottom.
@@ -85,7 +85,7 @@ supported strategies:
    relaxation) but pays one IFD on the eval path. Removes the per-project
    snapshot chore for callers that accept IFD.
 
-   Verified byte-for-byte: on the 322-crate `rust/systemd` workspace an
+   Verified byte-for-byte: on the 322-crate `safety/oxidized/systemd` workspace an
    IFD-built index yields derivations identical to the committed snapshot for
    all 322 crates (the generator sorts index deps by name to match cargo's
    ordering; edge order otherwise leaks into crate build inputs). Cost, tarballs
@@ -107,9 +107,9 @@ Handling `v2` from day one closes nocargo's oldest open bug.
 ## Components
 
 ```text
-nix/lib/cargo/
+platform/nix/lib/cargo/
   PLAN.md               this file
-  README.md             usage docs (mirrors nix/lib/deno/README.md)
+  README.md             usage docs (mirrors platform/nix/lib/deno/README.md)
   default.nix           flakelight module: perSystemLib.{buildCargoProject,cargoLib} + checks
   lib/                  pure eval, builtins-only (no pkgs, no nixpkgs lib)
     default.nix         assembles the lib set
@@ -132,7 +132,7 @@ nix/lib/cargo/
 ```
 
 `lib/` depends only on `builtins` so unit tests run with a bare
-`nix eval -f nix/lib/cargo/tests/foo.nix` and the resolver is trivially portable.
+`nix eval -f platform/nix/lib/cargo/tests/foo.nix` and the resolver is trivially portable.
 
 ## Feature resolution
 
@@ -201,7 +201,7 @@ packages.my-tool = { lib, ... }:
   lib.buildCargoProject {
     pname = "my-tool";
     src = ./.;                       # contains Cargo.toml + Cargo.lock
-    index = ../../nix/lib/cargo/index;   # snapshot or full index checkout
+    index = ../../platform/nix/lib/cargo/index;   # snapshot or full index checkout
     # features = [ "foo" ];          # root features, default: default set
     # noDefaultFeatures = true;
     # bins = [ "my-tool" ];          # default: all [[bin]] targets
@@ -216,17 +216,17 @@ packages.my-tool = { lib, ... }:
 ## Testing
 
 - Unit: assert-based eval tests per lib module, run directly via
-  `nix eval -f nix/lib/cargo/tests/<mod>.nix` and wired as trivial checks.
+  `nix eval -f platform/nix/lib/cargo/tests/<mod>.nix` and wired as trivial checks.
   Individual checks build with
   `nix build .#checks.x86_64-linux.cargo-<mod>`; never `nix flake check`
   (repo rule: it OOMs).
 - Corpus ladder, in order:
-  1. `rust/wclip`: one dep (`libc`), exercises fetch, index lookup, default
+  1. `safety/oxidized/wclip`: one dep (`libc`), exercises fetch, index lookup, default
      features, `build.rs`.
-  2. `rust/xz`: 77 locked crates, edition 2024, `liblzma-sys` native linking
+  2. `safety/oxidized/xz`: 77 locked crates, edition 2024, `liblzma-sys` native linking
      via `crateOverrides`, dev-dep filtering (criterion must not be built for
      the bin).
-  3. Remaining `rust/*` projects, then `ironclaw/*` (largest workspaces).
+  3. Remaining `rust/*` projects, then `ai/ironclaw/*` (largest workspaces).
 - Differential oracle: `tools/diff-cargo` compares eval-computed feature sets
   and package graphs against `cargo metadata` for each corpus lockfile.
   Later: scheduled agent sweeps over crates.io top-N, auto-filing fixture
@@ -283,7 +283,7 @@ sweeps against crates.io top-N.
 git deps, profile fidelity, and exclude globs landed on the landmines
 branch.)
 
-## Benchmark (rust/systemd, 2026-07-18)
+## Benchmark (safety/oxidized/systemd, 2026-07-18)
 
 Largest workspace in the repo: 100 members, 322 locked crates, 80 binaries,
 measured on 22 cores (max-jobs 22) against `buildRustPackage` + `cargoLock`.
@@ -413,9 +413,9 @@ lands only with a benchmark proving it helped.
   a `rust-systemd-dev` variant: debug profile, cranelift codegen, wild
   linking, with `-Clinker-features=-lld` to opt out of nightly's rust-lld
   default which would bypass the -B linker shim.
-- 2026-07-18: Library lives at `nix/lib/cargo/`, sibling of `nix/lib/deno`;
+- 2026-07-18: Library lives at `platform/nix/lib/cargo/`, sibling of `platform/nix/lib/deno`;
   exposed via `perSystemLib` like the deno lib. (Initially scaffolded at
-  `nix/cargo/`, moved on user correction.)
+  `platform/nix/cargo/`, moved on user correction.)
 - 2026-07-18: Snapshot mini-index is the default sourcing strategy; full
   index input supported but not wired in (repo weight, flake.lock churn).
 - 2026-07-18: `lib/` is builtins-only for portability and cheap tests.

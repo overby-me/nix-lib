@@ -10,7 +10,7 @@ crates are shared between all projects in the repo and cacheable per
 crate+version+features.
 
 Design, milestones, benchmarks, and the nocargo landmine audit:
-[PLAN.md](./PLAN.md). Headline numbers (rust/systemd, 100 members, 322
+[PLAN.md](./PLAN.md). Headline numbers (safety/oxidized/systemd, 100 members, 322
 locked crates): a one-line edit rebuilds in seconds instead of the full
 workspace recompile `buildRustPackage` pays; cranelift dev builds go
 ~2.4x faster cold; release links use the wild linker by default.
@@ -63,7 +63,7 @@ In a flakelight package definition:
 packages.my-tool = {lib, ...}:
   lib.buildCargoProject {
     src = ./.;
-    index = ../../nix/lib/cargo/index;
+    index = ../../platform/nix/lib/cargo/index;
   };
 ```
 
@@ -75,14 +75,14 @@ Passing a snapshot stays the recommended default for checked-in projects.
 After updating a `Cargo.lock`, refresh the snapshot:
 
 ```console
-nu nix/lib/cargo/tools/snapshot-index.nu nix/lib/cargo/index <path>/Cargo.lock
+nu platform/nix/lib/cargo/tools/snapshot-index.nu platform/nix/lib/cargo/index <path>/Cargo.lock
 ```
 
 Verify resolution against cargo (any project, or a sweep):
 
 ```console
-nix shell nixpkgs#cargo -c nu nix/lib/cargo/tools/diff-cargo.nu rust/xz
-nix shell nixpkgs#cargo -c nu nix/lib/cargo/tools/diff-cargo.nu sweep rust/*/
+nix shell nixpkgs#cargo -c nu platform/nix/lib/cargo/tools/diff-cargo.nu safety/oxidized/xz
+nix shell nixpkgs#cargo -c nu platform/nix/lib/cargo/tools/diff-cargo.nu sweep rust/*/
 ```
 
 ### Parameters
@@ -114,7 +114,7 @@ nix shell nixpkgs#cargo -c nu nix/lib/cargo/tools/diff-cargo.nu sweep rust/*/
 `lib.cargoLib` exposes the pure resolution primitives (`semver`, `cfg`,
 `lock`, `index`, `manifest`, `resolve`) for tests and advanced use.
 
-A fast-iteration example combining the knobs (see `rust/systemd`):
+A fast-iteration example combining the knobs (see `safety/oxidized/systemd`):
 `rust-systemd-dev` builds with `release = false`, a nightly toolchain with
 the cranelift codegen backend, and wild linking; the whole 100-member
 workspace cold-builds in under a minute and single-member edits rebuild in
@@ -140,7 +140,7 @@ nonzero test exit fails the build. Results are per member under
 
 ## Not supported (yet)
 
-Running bench targets, rmeta pipelining for cold-build speed. `rust/perl` is
+Running bench targets, rmeta pipelining for cold-build speed. `safety/oxidized/perl` is
 broken for reasons predating this library (its build.rs references an
 absolute dev-machine path).
 
@@ -156,6 +156,6 @@ absolute dev-machine path).
   tarballs when `index` is omitted
 - `tools/diff-cargo.nu` differential oracle against `cargo tree`
 - `index/` committed snapshot covering this repo's lockfiles
-- `tests/` eval unit tests (`nix eval -f nix/lib/cargo/tests/<mod>.nix`)
+- `tests/` eval unit tests (`nix eval -f platform/nix/lib/cargo/tests/<mod>.nix`)
 - `checks.nix` flake checks: `cargo-lib`, `cargo-build-wclip`,
   `cargo-build-xz` (build individually; never `nix flake check` here)

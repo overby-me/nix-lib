@@ -1,4 +1,4 @@
-# Run: nix eval -f nix/lib/buck2/tests/labels.nix
+# Run: nix eval -f platform/nix/lib/buck2/tests/labels.nix
 let
   buckconfig = import ../lib/buckconfig.nix;
   labels = import ../lib/labels.nix;

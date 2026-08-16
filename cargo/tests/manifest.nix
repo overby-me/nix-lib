@@ -1,9 +1,9 @@
-# Run: nix eval -f nix/cargo/tests/manifest.nix
+# Run: nix eval -f platform/nix/cargo/tests/manifest.nix
 let
   manifest = import ../lib/manifest.nix;
 
-  wclip = manifest.loadWorkspace ../../../../rust/wclip;
-  xz = manifest.loadWorkspace ../../../../rust/xz;
+  wclip = manifest.loadWorkspace ../../../../safety/oxidized/wclip;
+  xz = manifest.loadWorkspace ../../../../safety/oxidized/xz;
 
   wclipPkg = wclip.byName.rust-wclip;
   xzPkg = xz.byName.rust-xz;

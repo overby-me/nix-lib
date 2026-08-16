@@ -97,9 +97,9 @@ tests and advanced use.
   analysis-phase action graph, over the committed `no_prelude` fixtures.
 
   ```console
-  nix eval -f nix/lib/buck2/tests/labels.nix
-  nix eval -f nix/lib/buck2/tests/load.nix
-  nix eval -f nix/lib/buck2/tests/analysis.nix
+  nix eval -f platform/nix/lib/buck2/tests/labels.nix
+  nix eval -f platform/nix/lib/buck2/tests/load.nix
+  nix eval -f platform/nix/lib/buck2/tests/analysis.nix
   ```
 
 - End-to-end flake checks (build the binary, run it, assert output):

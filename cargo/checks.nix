@@ -1,5 +1,5 @@
 # Flakelight module: checks for the cargo library. Imported explicitly from
-# flake.nix (the nix/lib autoloader only routes default.nix, on purpose:
+# flake.nix (the platform/nix/lib autoloader only routes default.nix, on purpose:
 # checks are not lib content).
 #
 # Run one: nix build .#checks.x86_64-linux.cargo-lib
@@ -17,7 +17,7 @@
     # End-to-end: wclip built with per-crate derivations, binary smoke test.
     cargo-build-wclip = pkgs: let
       drv = pkgs.lib.buildCargoProject {
-        src = ../../../rust/wclip;
+        src = ../../../safety/oxidized/wclip;
         index = ./index;
       };
     in
@@ -29,7 +29,7 @@
     # End-to-end: compile and run wclip's unit tests through runTests.
     cargo-test-wclip = pkgs:
       (pkgs.lib.buildCargoProject {
-        src = ../../../rust/wclip;
+        src = ../../../safety/oxidized/wclip;
         index = ./index;
         runTests = true;
       })
@@ -39,7 +39,7 @@
     # dev-deps excluded (criterion must not be built).
     cargo-build-xz = pkgs: let
       drv = pkgs.lib.buildCargoProject {
-        src = ../../../rust/xz;
+        src = ../../../safety/oxidized/xz;
         index = ./index;
         bins = ["xz"];
         crateOverrides.liblzma-sys = {

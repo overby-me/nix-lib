@@ -1,9 +1,9 @@
-# Run: nix eval -f nix/cargo/tests/lock.nix
+# Run: nix eval -f platform/nix/cargo/tests/lock.nix
 let
   lock = import ../lib/lock.nix;
 
-  wclip = lock.parseLock (builtins.readFile ../../../../rust/wclip/Cargo.lock);
-  xz = lock.parseLock (builtins.readFile ../../../../rust/xz/Cargo.lock);
+  wclip = lock.parseLock (builtins.readFile ../../../../safety/oxidized/wclip/Cargo.lock);
+  xz = lock.parseLock (builtins.readFile ../../../../safety/oxidized/xz/Cargo.lock);
 
   libc = wclip.byId."libc-0.2.186";
   member = wclip.byId."rust-wclip-0.1.0";

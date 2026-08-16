@@ -1,6 +1,6 @@
 # Lower a Ninja build graph (from `rust-ninja -t graph-json`) to Nix
 # derivations: one derivation per edge, no import-from-derivation beyond the
-# single graph-extraction step. A sibling to nix/lib/buck2/build/lower.nix.
+# single graph-extraction step. A sibling to platform/nix/lib/buck2/build/lower.nix.
 #
 # Model: a virtual build tree rooted at the Ninja build directory. Every edge
 # output has a stable build-dir-relative path (exactly the string Ninja uses).

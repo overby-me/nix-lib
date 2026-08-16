@@ -1,4 +1,4 @@
-# Run: nix eval -f nix/lib/buck2/tests/analysis.nix
+# Run: nix eval -f platform/nix/lib/buck2/tests/analysis.nix
 let
   skylark = import ../../skylark/api.nix;
   buckconfig = import ../lib/buckconfig.nix;

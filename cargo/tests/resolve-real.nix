@@ -1,4 +1,4 @@
-# Run: nix eval -f nix/lib/cargo/tests/resolve-real.nix
+# Run: nix eval -f platform/nix/lib/cargo/tests/resolve-real.nix
 #
 # Resolves the real wclip and xz lockfiles against the committed snapshot
 # index. Resolution itself verifies every crate checksum (lock vs index).
@@ -18,9 +18,9 @@ let
       workspace = manifestLib.loadWorkspace src;
     }).nodes;
 
-  wclip = resolveProject ../../../../rust/wclip ["rust-wclip"] false;
-  xz = resolveProject ../../../../rust/xz ["rust-xz"] false;
-  xzDev = resolveProject ../../../../rust/xz ["rust-xz"] true;
+  wclip = resolveProject ../../../../safety/oxidized/wclip ["rust-wclip"] false;
+  xz = resolveProject ../../../../safety/oxidized/xz ["rust-xz"] false;
+  xzDev = resolveProject ../../../../safety/oxidized/xz ["rust-xz"] true;
 
   xzNames = builtins.attrNames xz;
   has = nodes: name:

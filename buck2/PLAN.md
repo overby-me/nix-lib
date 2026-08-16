@@ -6,7 +6,7 @@ Build upstream [Buck2](https://github.com/facebook/buck2) projects with Nix,
 parsing the Starlark build files at evaluation time and lowering each Buck2
 *action* to its own Nix derivation. No import-from-derivation, no `buck2`
 binary in the loop, no generated Nix committed to the tree. A sibling to
-`nix/lib/cargo` (per-crate derivations from `Cargo.lock`) and `nix/lib/deno`,
+`platform/nix/lib/cargo` (per-crate derivations from `Cargo.lock`) and `platform/nix/lib/deno`,
 exposed through the flakelight `perSystemLib` module.
 
 Status: in progress. See milestones at the bottom.
@@ -18,11 +18,11 @@ Buck2's build files are [Starlark](https://github.com/bazelbuild/starlark)
 several other tools use. A Starlark interpreter is therefore useful well
 beyond Buck2. This work is two libraries:
 
-- `nix/lib/skylark`: a pure-Nix Starlark interpreter (lexer, parser,
+- `platform/nix/lib/skylark`: a pure-Nix Starlark interpreter (lexer, parser,
   tree-walking evaluator, standard builtins). Knows nothing about Buck2. A
   Bazel front end, a `.bzl` linter, or a config loader could reuse it
   unchanged.
-- `nix/lib/buck2`: the Buck2 semantics layered on top. It supplies the Buck2
+- `platform/nix/lib/buck2`: the Buck2 semantics layered on top. It supplies the Buck2
   Starlark globals (`rule`, `attrs`, `provider`, `cmd_args`, `glob`,
   `ctx.actions.*`, ...), the cell/label/loader machinery, the analysis
   driver, and the lowering from Buck2's action graph to Nix derivations.
@@ -131,14 +131,14 @@ them):
   `xs = []; xs.append(x); xs.extend([...])`.
 - `glob([...])`, `host_info()`, `fail(...)`, `oncall(...)`.
 
-## Skylark interpreter (`nix/lib/skylark`)
+## Skylark interpreter (`platform/nix/lib/skylark`)
 
 Builtins-only (no `pkgs`, no nixpkgs `lib` beyond what we pass in), mirroring
-`nix/lib/cargo/lib`: unit tests run with a bare
-`nix eval -f nix/lib/skylark/tests/<mod>.nix`.
+`platform/nix/lib/cargo/lib`: unit tests run with a bare
+`nix eval -f platform/nix/lib/skylark/tests/<mod>.nix`.
 
 ```text
-nix/lib/skylark/
+platform/nix/lib/skylark/
   default.nix    # public API + assembly
   lexer.nix      # source -> token list (indentation, strings, numbers, ...)
   parser.nix     # tokens -> AST (recursive descent, Pratt for expressions)
@@ -223,12 +223,12 @@ through the cell map to a file path, evaluates it once, and memoizes. Freezing
 is a no-op in our immutable representation beyond snapshotting a module's
 globals when evaluation of that module finishes.
 
-## Buck2 layer (`nix/lib/buck2`)
+## Buck2 layer (`platform/nix/lib/buck2`)
 
 ```text
-nix/lib/buck2/
+platform/nix/lib/buck2/
   PLAN.md               this file
-  README.md             usage docs (mirrors nix/lib/cargo/README.md)
+  README.md             usage docs (mirrors platform/nix/lib/cargo/README.md)
   default.nix           perSystemLib.{buildBuck2Project, buck2Lib} + skylark re-export
   lib/                  pure eval (builtins only, uses ../skylark)
     buckconfig.nix      parse .buckconfig ([cells], simple INI)
@@ -350,18 +350,18 @@ packages.hello = { lib, ... }:
 
 ## Testing
 
-- **Skylark unit tests** (`nix/lib/skylark/tests/*.nix`): assert-based,
+- **Skylark unit tests** (`platform/nix/lib/skylark/tests/*.nix`): assert-based,
   runnable with `nix eval -f`. Lexer and parser snapshot token/AST shapes;
   evaluator tests cover scalars, collections, functions and closures, control
   flow, comprehensions, mutation-by-rebind, `load()` injection, and truthiness
   or equality edge cases. Seed from the Starlark spec's own examples so the
   interpreter tracks a real conformance target, not just what Buck2 happens to
   use.
-- **Buck2 unit tests** (`nix/lib/buck2/tests/*.nix`): label parsing, cell
+- **Buck2 unit tests** (`platform/nix/lib/buck2/tests/*.nix`): label parsing, cell
   resolution, `.buckconfig` parsing, load-phase target graph for the fixture
   packages, and analysis-phase action graphs (assert the argv and
   input/output artifacts for the cpp target without building anything).
-- **End-to-end checks** (`nix/lib/buck2/checks.nix`, wired individually into
+- **End-to-end checks** (`platform/nix/lib/buck2/checks.nix`, wired individually into
   `flake.nix`; never `nix flake check`, per repo rule): build
   `//cpp/hello_world:main`, `//cpp/library:library`, `//rust:main`, and later
   `//go:main`, then run the binary and assert its output. Fixtures are a
@@ -499,9 +499,9 @@ pure sandbox / on NixOS via autoPatchelf, where a bare download would not).
 
 ## Decision log
 
-- 2026-07-19: Two libraries, `nix/lib/skylark` (reusable interpreter) and
-  `nix/lib/buck2` (semantics + lowering), sibling to `nix/lib/cargo` and
-  `nix/lib/deno`, exposed via `perSystemLib`. Rationale: Starlark outlives
+- 2026-07-19: Two libraries, `platform/nix/lib/skylark` (reusable interpreter) and
+  `platform/nix/lib/buck2` (semantics + lowering), sibling to `platform/nix/lib/cargo` and
+  `platform/nix/lib/deno`, exposed via `perSystemLib`. Rationale: Starlark outlives
   Buck2 (Bazel and others), and the cargo library already proves the
   pure-eval, per-unit-derivation, no-IFD pattern in this repo.
 - 2026-07-19: The build unit is the Buck2 *action* (finer than a target), one
