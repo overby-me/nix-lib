@@ -9,13 +9,13 @@ bare `nix eval -f`.
 It is host-agnostic on purpose: `load()` is resolved by a caller-supplied
 function, extra globals are injectable, and an opaque `world` accumulator is
 threaded through evaluation so a host can collect effects (Buck2 uses this for
-target and action registration). `platform/nix/lib/buck2` is the first consumer; the
+target and action registration). `platform/nix/config/lib/buck2` is the first consumer; the
 interpreter itself knows nothing about Buck2.
 
 ## Usage
 
 ```nix
-let sk = import ./platform/nix/lib/skylark/api.nix;
+let sk = import ./platform/nix/config/lib/skylark/api.nix;
 in {
   # Evaluate a single expression.
   answer = sk.evalExpr "6 * 7";                       # => 42 (a skylark int)
@@ -83,9 +83,9 @@ but not for mutation through an alias (`ys = xs; ys.append(1)` will not change
 ## Tests
 
 ```console
-nix eval -f platform/nix/lib/skylark/tests/lexer.nix
-nix eval -f platform/nix/lib/skylark/tests/parser.nix
-nix eval -f platform/nix/lib/skylark/tests/eval.nix
+nix eval -f platform/nix/config/lib/skylark/tests/lexer.nix
+nix eval -f platform/nix/config/lib/skylark/tests/parser.nix
+nix eval -f platform/nix/config/lib/skylark/tests/eval.nix
 ```
 
 Or as a flake check: `nix build .#checks.x86_64-linux.skylark-lib` (never

@@ -1,5 +1,5 @@
 # Shared string/char helpers for the skylark interpreter. builtins only, so
-# unit tests run with a bare `nix eval -f platform/nix/lib/skylark/tests/<mod>.nix`.
+# unit tests run with a bare `nix eval -f platform/nix/config/lib/skylark/tests/<mod>.nix`.
 let
   inherit (builtins) substring stringLength;
 

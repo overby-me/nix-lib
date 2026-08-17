@@ -1,4 +1,4 @@
-# Run: nix eval -f platform/nix/cargo/tests/manifest.nix
+# Run: nix eval -f platform/nix/config/cargo/tests/manifest.nix
 let
   manifest = import ../lib/manifest.nix;
 

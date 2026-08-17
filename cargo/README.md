@@ -63,7 +63,7 @@ In a flakelight package definition:
 packages.my-tool = {lib, ...}:
   lib.buildCargoProject {
     src = ./.;
-    index = ../../../../platform/nix/lib/cargo/index;
+    index = ../../../../platform/nix/config/lib/cargo/index;
   };
 ```
 
@@ -75,14 +75,14 @@ Passing a snapshot stays the recommended default for checked-in projects.
 After updating a `Cargo.lock`, refresh the snapshot:
 
 ```console
-nu platform/nix/lib/cargo/tools/snapshot-index.nu platform/nix/lib/cargo/index <path>/Cargo.lock
+nu platform/nix/config/lib/cargo/tools/snapshot-index.nu platform/nix/config/lib/cargo/index <path>/Cargo.lock
 ```
 
 Verify resolution against cargo (any project, or a sweep):
 
 ```console
-nix shell nixpkgs#cargo -c nu platform/nix/lib/cargo/tools/diff-cargo.nu safety/oxidized/xz
-nix shell nixpkgs#cargo -c nu platform/nix/lib/cargo/tools/diff-cargo.nu sweep rust/*/
+nix shell nixpkgs#cargo -c nu platform/nix/config/lib/cargo/tools/diff-cargo.nu safety/oxidized/xz
+nix shell nixpkgs#cargo -c nu platform/nix/config/lib/cargo/tools/diff-cargo.nu sweep rust/*/
 ```
 
 ### Parameters
@@ -156,6 +156,6 @@ absolute dev-machine path).
   tarballs when `index` is omitted
 - `tools/diff-cargo.nu` differential oracle against `cargo tree`
 - `index/` committed snapshot covering this repo's lockfiles
-- `tests/` eval unit tests (`nix eval -f platform/nix/lib/cargo/tests/<mod>.nix`)
+- `tests/` eval unit tests (`nix eval -f platform/nix/config/lib/cargo/tests/<mod>.nix`)
 - `checks.nix` flake checks: `cargo-lib`, `cargo-build-wclip`,
   `cargo-build-xz` (build individually; never `nix flake check` here)

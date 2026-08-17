@@ -1,5 +1,5 @@
 # Flakelight module: checks for the skylark interpreter. Imported explicitly
-# from flake.nix (the platform/nix/lib autoloader only routes default.nix).
+# from flake.nix (the platform/nix/config/lib autoloader only routes default.nix).
 #
 # Run one: nix build .#checks.x86_64-linux.skylark-lib
 # (never `nix flake check`, see the repo rules)

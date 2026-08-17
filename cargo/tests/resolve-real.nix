@@ -1,4 +1,4 @@
-# Run: nix eval -f platform/nix/lib/cargo/tests/resolve-real.nix
+# Run: nix eval -f platform/nix/config/lib/cargo/tests/resolve-real.nix
 #
 # Resolves the real wclip and xz lockfiles against the committed snapshot
 # index. Resolution itself verifies every crate checksum (lock vs index).

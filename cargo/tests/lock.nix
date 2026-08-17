@@ -1,4 +1,4 @@
-# Run: nix eval -f platform/nix/cargo/tests/lock.nix
+# Run: nix eval -f platform/nix/config/cargo/tests/lock.nix
 let
   lock = import ../lib/lock.nix;
 

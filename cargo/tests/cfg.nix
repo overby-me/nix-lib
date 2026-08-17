@@ -1,4 +1,4 @@
-# Run: nix eval -f platform/nix/cargo/tests/cfg.nix
+# Run: nix eval -f platform/nix/config/cargo/tests/cfg.nix
 let
   cfg = import ../lib/cfg.nix;
 

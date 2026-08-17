@@ -1,4 +1,4 @@
-# Run: nix eval -f platform/nix/lib/skylark/tests/parser.nix
+# Run: nix eval -f platform/nix/config/lib/skylark/tests/parser.nix
 let
   parser = import ../parser.nix;
   p = parser.parseExpr;

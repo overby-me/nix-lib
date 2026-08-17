@@ -1,4 +1,4 @@
-# Run: nix eval -f platform/nix/lib/skylark/tests/lexer.nix
+# Run: nix eval -f platform/nix/config/lib/skylark/tests/lexer.nix
 let
   tokenize = import ../lexer.nix;
 

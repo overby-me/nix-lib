@@ -1,5 +1,5 @@
 # Flakelight module: checks for the cargo library. Imported explicitly from
-# flake.nix (the platform/nix/lib autoloader only routes default.nix, on purpose:
+# flake.nix (the platform/nix/config/lib autoloader only routes default.nix, on purpose:
 # checks are not lib content).
 #
 # Run one: nix build .#checks.x86_64-linux.cargo-lib

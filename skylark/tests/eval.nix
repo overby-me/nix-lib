@@ -1,4 +1,4 @@
-# Run: nix eval -f platform/nix/lib/skylark/tests/eval.nix
+# Run: nix eval -f platform/nix/config/lib/skylark/tests/eval.nix
 let
   api = import ../api.nix;
   V = api.values;

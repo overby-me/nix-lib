@@ -2,7 +2,7 @@
 
 Build Rust projects from `Cargo.lock` with per-crate Nix derivations, using
 neither import-from-derivation nor code generation. A reusable library in the
-style of `platform/nix/lib/deno` (parse the lock at eval time, fetch with FODs, build in
+style of `platform/nix/config/lib/deno` (parse the lock at eval time, fetch with FODs, build in
 the sandbox), exposed through the flakelight `perSystemLib` module.
 
 Status: in progress. See milestones at the bottom.
@@ -107,9 +107,9 @@ Handling `v2` from day one closes nocargo's oldest open bug.
 ## Components
 
 ```text
-platform/nix/lib/cargo/
+platform/nix/config/lib/cargo/
   PLAN.md               this file
-  README.md             usage docs (mirrors platform/nix/lib/deno/README.md)
+  README.md             usage docs (mirrors platform/nix/config/lib/deno/README.md)
   default.nix           flakelight module: perSystemLib.{buildCargoProject,cargoLib} + checks
   lib/                  pure eval, builtins-only (no pkgs, no nixpkgs lib)
     default.nix         assembles the lib set
@@ -132,7 +132,7 @@ platform/nix/lib/cargo/
 ```
 
 `lib/` depends only on `builtins` so unit tests run with a bare
-`nix eval -f platform/nix/lib/cargo/tests/foo.nix` and the resolver is trivially portable.
+`nix eval -f platform/nix/config/lib/cargo/tests/foo.nix` and the resolver is trivially portable.
 
 ## Feature resolution
 
@@ -201,7 +201,7 @@ packages.my-tool = { lib, ... }:
   lib.buildCargoProject {
     pname = "my-tool";
     src = ./.;                       # contains Cargo.toml + Cargo.lock
-    index = ../../../../platform/nix/lib/cargo/index;   # snapshot or full index checkout
+    index = ../../../../platform/nix/config/lib/cargo/index;   # snapshot or full index checkout
     # features = [ "foo" ];          # root features, default: default set
     # noDefaultFeatures = true;
     # bins = [ "my-tool" ];          # default: all [[bin]] targets
@@ -216,7 +216,7 @@ packages.my-tool = { lib, ... }:
 ## Testing
 
 - Unit: assert-based eval tests per lib module, run directly via
-  `nix eval -f platform/nix/lib/cargo/tests/<mod>.nix` and wired as trivial checks.
+  `nix eval -f platform/nix/config/lib/cargo/tests/<mod>.nix` and wired as trivial checks.
   Individual checks build with
   `nix build .#checks.x86_64-linux.cargo-<mod>`; never `nix flake check`
   (repo rule: it OOMs).
@@ -413,9 +413,9 @@ lands only with a benchmark proving it helped.
   a `oxidized-systemd-dev` variant: debug profile, cranelift codegen, wild
   linking, with `-Clinker-features=-lld` to opt out of nightly's rust-lld
   default which would bypass the -B linker shim.
-- 2026-07-18: Library lives at `platform/nix/lib/cargo/`, sibling of `platform/nix/lib/deno`;
+- 2026-07-18: Library lives at `platform/nix/config/lib/cargo/`, sibling of `platform/nix/config/lib/deno`;
   exposed via `perSystemLib` like the deno lib. (Initially scaffolded at
-  `platform/nix/cargo/`, moved on user correction.)
+  `platform/nix/config/cargo/`, moved on user correction.)
 - 2026-07-18: Snapshot mini-index is the default sourcing strategy; full
   index input supported but not wired in (repo weight, flake.lock churn).
 - 2026-07-18: `lib/` is builtins-only for portability and cheap tests.
